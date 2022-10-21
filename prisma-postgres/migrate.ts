@@ -73,7 +73,15 @@ async function main() {
     console.log(
       `Found ${postReads.length} post reads. Upserting them into SQLite ⤴️`,
     )
-    for (const postRead of postReads) {
+    for (let index = 0; index < postReads.length; index++) {
+      if (index % 100 === 0) {
+        console.log(`Upserting ${index}`)
+      }
+      const postRead = postReads[index]
+      if (!postRead) {
+        console.log('HUH???', index)
+        continue
+      }
       // eslint-disable-next-line no-await-in-loop
       await sq.postRead.upsert({
         where: {id: postRead.id},
