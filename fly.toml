@@ -49,10 +49,10 @@ kill_timeout = 5
 
   [[services.http_checks]]
     interval = 10000
-    grace_period = "60s"
+    grace_period = "600s"
     method = "get"
     path = "/healthcheck"
     protocol = "http"
-    timeout = 2000
+    timeout = 5000
     tls_skip_verify = false
     [services.http_checks.headers]
