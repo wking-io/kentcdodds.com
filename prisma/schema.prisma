@@ -60,3 +60,9 @@ model PostRead {
   clientId  String?
   postSlug  String
 }
+
+model Cache {
+  key      String @id
+  value    String
+  metadata String
+}

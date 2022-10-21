@@ -346,7 +346,7 @@ function YouScreen() {
               readOnly
             />
 
-            <div className="relative col-span-full mb-3 rounded-lg bg-gray-100 ring-2 ring-team-current ring-offset-4 ring-offset-team-current ring-offset-team-current focus-within:outline-none focus-within:ring-2 dark:bg-gray-800 lg:col-span-4 lg:mb-0">
+            <div className="relative col-span-full mb-3 rounded-lg bg-gray-100 ring-2 ring-team-current ring-offset-4 ring-offset-team-current focus-within:outline-none focus-within:ring-2 dark:bg-gray-800 lg:col-span-4 lg:mb-0">
               <span className="absolute left-9 top-9 text-team-current">
                 <CheckCircledIcon />
               </span>

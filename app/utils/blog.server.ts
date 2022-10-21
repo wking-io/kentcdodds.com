@@ -1,5 +1,6 @@
 import type {Team, MdxListItem, Await, User} from '~/types'
 import {subYears, subMonths} from 'date-fns'
+import {cachified} from 'cachified'
 import {shuffle} from 'lodash'
 import {getBlogMdxListItems} from './mdx'
 import {prisma} from './prisma.server'
@@ -13,8 +14,7 @@ import {
 import {getSession, getUser} from './session.server'
 import {filterPosts} from './blog'
 import {getClientSession} from './client.server'
-import {cachified, lruCache} from './cache.server'
-import {redisCache} from './redis.server'
+import {cache, lruCache, shouldForceFresh} from './cache.server'
 import {sendMessageFromDiscordBot} from './discord.server'
 import {teamEmoji} from './team-provider'
 
@@ -144,7 +144,7 @@ async function getMostPopularPostSlugs({
 
   return cachified({
     key: `${limit}-most-popular-post-slugs`,
-    maxAge: 1000 * 60,
+    ttl: 1000 * 60,
     cache: lruCache,
     getFreshValue,
     checkValue: (value: unknown) =>
@@ -153,11 +153,12 @@ async function getMostPopularPostSlugs({
 }
 
 async function getTotalPostReads(request: Request, slug?: string) {
+  const key = `total-post-reads:${slug ?? '__all-posts__'}`
   return cachified({
-    key: `total-post-reads:${slug ?? '__all-posts__'}`,
+    key,
     cache: lruCache,
-    maxAge: 1000 * 60,
-    request,
+    ttl: 1000 * 60,
+    forceFresh: await shouldForceFresh({request, key}),
     checkValue: (value: unknown) => typeof value === 'number',
     getFreshValue: () =>
       prisma.postRead.count(slug ? {where: {postSlug: slug}} : undefined),
@@ -165,11 +166,12 @@ async function getTotalPostReads(request: Request, slug?: string) {
 }
 
 async function getReaderCount(request: Request) {
+  const key = 'total-reader-count'
   return cachified({
-    key: 'total-reader-count',
+    key,
     cache: lruCache,
-    maxAge: 1000 * 60 * 5,
-    request,
+    ttl: 1000 * 60 * 5,
+    forceFresh: await shouldForceFresh({request, key}),
     checkValue: (value: unknown) => typeof value === 'number',
     getFreshValue: async () => {
       // couldn't figure out how to do this in one query with out $queryRaw 🤷‍♂️
@@ -197,10 +199,9 @@ async function getBlogReadRankings({
   const key = slug ? `blog:${slug}:rankings` : `blog:rankings`
   const rankingObjs = await cachified({
     key,
-    cache: redisCache,
-    maxAge: slug ? 1000 * 60 * 60 * 24 * 7 : 1000 * 60 * 60,
-    request,
-    forceFresh,
+    cache,
+    ttl: slug ? 1000 * 60 * 60 * 24 * 7 : 1000 * 60 * 60,
+    forceFresh: await shouldForceFresh({forceFresh, request, key}),
     checkValue: (value: unknown) =>
       Array.isArray(value) &&
       value.every(v => typeof v === 'object' && 'team' in v),
@@ -263,20 +264,20 @@ async function getAllBlogPostReadRankings({
   request?: Request
   forceFresh?: boolean
 }) {
+  const key = 'all-blog-post-read-rankings'
   return cachified({
-    key: 'all-blog-post-read-rankings',
-    cache: redisCache,
-    forceFresh,
-    request,
-    maxAge: 1000 * 60 * 5, // the underlying caching should be able to handle this every 5 minues
+    key,
+    cache,
+    forceFresh: await shouldForceFresh({forceFresh, request, key}),
+    ttl: 1000 * 60 * 5, // the underlying caching should be able to handle this every 5 minues
     getFreshValue: async () => {
       const posts = await getBlogMdxListItems({request})
       const {default: pLimit} = await import('p-limit')
 
       // each of the getBlogReadRankings calls results in 9 postgres queries
       // and we don't want to hit the limit of connections so we limit this
-      // to 2 at a time. Though most of the data should be cached in redis
-      // anyway. This is good to just be certain.
+      // to 2 at a time. Though most of the data should be cached anyway.
+      // This is good to just be certain.
       const limit = pLimit(2)
       const allPostReadRankings: Record<string, ReadRankings> = {}
       await Promise.all(
