@@ -5,12 +5,11 @@ import {
   prisma,
   getMagicLink,
   getUserFromSessionId,
-  prismaWrite,
   validateMagicLink,
   createSession,
   sessionExpirationTime,
 } from './prisma.server'
-import {getRequiredServerEnvVar} from './misc'
+import {ensurePrimary, getRequiredServerEnvVar} from './misc'
 import {getLoginInfoSession} from './login.server'
 
 const sessionIdKey = '__session_id__'
@@ -87,8 +86,9 @@ async function getSession(request: Request) {
     signOut: () => {
       const sessionId = getSessionId()
       if (sessionId) {
+        ensurePrimary()
         unsetSessionId()
-        prismaWrite.session
+        prisma.session
           .delete({where: {id: sessionId}})
           .catch((error: unknown) => {
             console.error(`Failure deleting user session: `, error)
@@ -127,7 +127,8 @@ async function deleteOtherSessions(request: Request) {
     return
   }
   const user = await getUserFromSessionId(token)
-  await prismaWrite.session.deleteMany({
+  ensurePrimary()
+  await prisma.session.deleteMany({
     where: {userId: user.id, NOT: {id: token}},
   })
 }

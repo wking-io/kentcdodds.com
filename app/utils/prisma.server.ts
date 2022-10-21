@@ -2,20 +2,18 @@ import {PrismaClient} from '@prisma/client'
 import chalk from 'chalk'
 import type {Session} from '~/types'
 import {encrypt, decrypt} from './encryption.server'
+import {ensurePrimary} from './misc'
 
 declare global {
   // This prevents us from making multiple connections to the db when the
   // require cache is cleared.
   // eslint-disable-next-line
-  var prisma: ReturnType<typeof getClient> | undefined
-  // eslint-disable-next-line
-  var prismaWrite: ReturnType<typeof getClient> | undefined
+  var __prisma: ReturnType<typeof getClient> | undefined
 }
 
 const logThreshold = 50
 
-const prisma = global.prisma ?? (global.prisma = getClient())
-const prismaWrite = prisma
+const prisma = global.__prisma ?? (global.__prisma = getClient())
 
 function getClient(): PrismaClient {
   // NOTE: during development if you change anything in this function, remember
@@ -144,7 +142,8 @@ async function validateMagicLink(link: string, sessionMagicLink?: string) {
 async function createSession(
   sessionData: Omit<Session, 'id' | 'expirationDate' | 'createdAt'>,
 ) {
-  return prismaWrite.session.create({
+  ensurePrimary()
+  return prisma.session.create({
     data: {
       ...sessionData,
       expirationDate: new Date(Date.now() + sessionExpirationTime),
@@ -162,15 +161,17 @@ async function getUserFromSessionId(sessionId: string) {
   }
 
   if (Date.now() > session.expirationDate.getTime()) {
-    await prismaWrite.session.delete({where: {id: sessionId}})
+    ensurePrimary()
+    await prisma.session.delete({where: {id: sessionId}})
     throw new Error('Session expired. Please request a new magic link.')
   }
 
   // if there's less than ~six months left, extend the session
   const twoWeeks = 1000 * 60 * 60 * 24 * 30 * 6
   if (Date.now() + twoWeeks > session.expirationDate.getTime()) {
+    ensurePrimary()
     const newExpirationDate = new Date(Date.now() + sessionExpirationTime)
-    await prismaWrite.session.update({
+    await prisma.session.update({
       data: {expirationDate: newExpirationDate},
       where: {id: sessionId},
     })
@@ -209,7 +210,8 @@ async function addPostRead({
   if (readInLastWeek) {
     return null
   } else {
-    const postRead = await prismaWrite.postRead.create({
+    ensurePrimary()
+    const postRead = await prisma.postRead.create({
       data: {postSlug: slug, ...id},
       select: {id: true},
     })
@@ -219,7 +221,6 @@ async function addPostRead({
 
 export {
   prisma,
-  prismaWrite,
   getMagicLink,
   validateMagicLink,
   linkExpirationTime,
