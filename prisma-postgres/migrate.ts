@@ -27,13 +27,21 @@ async function main() {
   await pg.$connect()
   await sq.$connect()
 
+  console.log('connected 🔌')
+  console.time('users 👥')
   const users = await pg.user.findMany()
+  console.log(`Found ${users.length} users. Upserting them into SQLite ⤴️`)
   for (const user of users) {
     // eslint-disable-next-line no-await-in-loop
     await sq.user.upsert({where: {id: user.id}, update: user, create: user})
   }
+  console.timeEnd('users 👥')
 
+  console.time('sessions 📊')
   const sessions = await pg.session.findMany()
+  console.log(
+    `Found ${sessions.length} sessions. Upserting them into SQLite ⤴️`,
+  )
   for (const session of sessions) {
     // eslint-disable-next-line no-await-in-loop
     await sq.session.upsert({
@@ -42,8 +50,13 @@ async function main() {
       create: session,
     })
   }
+  console.timeEnd('sessions 📊')
 
+  console.time('postReads 📖')
   const postReads = await pg.postRead.findMany()
+  console.log(
+    `Found ${postReads.length} post reads. Upserting them into SQLite ⤴️`,
+  )
   for (const postRead of postReads) {
     // eslint-disable-next-line no-await-in-loop
     await sq.postRead.upsert({
@@ -52,12 +65,16 @@ async function main() {
       create: postRead,
     })
   }
+  console.timeEnd('postReads 📖')
 
+  console.time('calls 📞')
   const calls = await pg.call.findMany()
+  console.log(`Found ${calls.length} calls. Upserting them into SQLite ⤴️`)
   for (const call of calls) {
     // eslint-disable-next-line no-await-in-loop
     await sq.call.upsert({where: {id: call.id}, update: call, create: call})
   }
+  console.timeEnd('calls 📞')
 
   console.log('✅  all finished')
 
