@@ -252,11 +252,15 @@ function getDomainUrl(request: Request) {
 function ensurePrimary() {
   const FLY_REGION = getRequiredServerEnvVar('FLY_REGION')
   if (FLY_REGION !== ENV.PRIMARY_REGION) {
-    throw new Response('Fly Replay', {
-      status: 409,
-      headers: {'fly-replay': `region=${ENV.PRIMARY_REGION}`},
-    })
+    throw getFlyReplayResponse()
   }
+}
+
+function getFlyReplayResponse() {
+  return new Response('Fly Replay', {
+    status: 409,
+    headers: {'fly-replay': `region=${ENV.PRIMARY_REGION}`},
+  })
 }
 
 function removeTrailingSlash(s: string) {
@@ -395,6 +399,7 @@ export {
   useDebounce,
   typedBoolean,
   ensurePrimary,
+  getFlyReplayResponse,
   getRequiredServerEnvVar,
   getRequiredGlobalEnvVar,
   getDiscordAuthorizeURL,

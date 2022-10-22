@@ -45,11 +45,11 @@ async function getMdxPage(
   },
   options: CachifiedOptions,
 ): Promise<MdxPage | null> {
-  const {forceFresh, ttl, request} = options
+  const {forceFresh, ttl = defaultTTL, request} = options
   const key = getCompiledKey(contentDir, slug)
   const page = await cachified({
     cache,
-    ttl: ttl ?? defaultTTL,
+    ttl,
     forceFresh: await shouldForceFresh({forceFresh, request, key}),
     // reusing the same key as compiledMdxCached because we just return that
     // exact same value. Cachifying this allows us to skip getting the cached files
@@ -106,11 +106,11 @@ async function getMdxPagesInDirectory(
 const getDirListKey = (contentDir: string) => `${contentDir}:dir-list`
 
 async function getMdxDirList(contentDir: string, options?: CachifiedOptions) {
-  const {forceFresh, ttl, request} = options ?? {}
+  const {forceFresh, ttl = defaultTTL, request} = options ?? {}
   const key = getDirListKey(contentDir)
   return cachified({
     cache,
-    ttl: ttl ?? defaultTTL,
+    ttl,
     forceFresh: await shouldForceFresh({forceFresh, request, key}),
     key,
     checkValue: (value: unknown) => Array.isArray(value),
@@ -137,11 +137,11 @@ async function downloadMdxFilesCached(
   slug: string,
   options: CachifiedOptions,
 ) {
-  const {forceFresh, ttl, request} = options
+  const {forceFresh, ttl = defaultTTL, request} = options
   const key = getDownloadKey(contentDir, slug)
   const downloaded = await cachified({
     cache,
-    ttl: ttl ?? defaultTTL,
+    ttl,
     forceFresh: await shouldForceFresh({forceFresh, request, key}),
     key,
     checkValue: (value: unknown) => {
@@ -291,11 +291,11 @@ async function getDataUrlForImage(imageUrl: string) {
 }
 
 async function getBlogMdxListItems(options: CachifiedOptions) {
-  const {request, forceFresh, ttl} = options
+  const {request, forceFresh, ttl = defaultTTL} = options
   const key = 'blog:mdx-list-items'
   return cachified({
     cache,
-    ttl: ttl ?? defaultTTL,
+    ttl,
     forceFresh: await shouldForceFresh({forceFresh, request, key}),
     key,
     getFreshValue: async () => {
