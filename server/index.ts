@@ -34,6 +34,14 @@ const BUILD_DIR = path.join(process.cwd(), 'build')
 
 const app = express()
 
+function logMiddle(message: string) {
+  app.use((req, res, next) => {
+    console.log(`${message}: ${req.url}`)
+    next()
+  })
+}
+logMiddle('01')
+
 app.use((req, res, next) => {
   res.set('X-Powered-By', 'Kody the Koala')
   res.set('X-Fly-Region', process.env.FLY_REGION ?? 'unknown')
@@ -41,6 +49,7 @@ app.use((req, res, next) => {
   res.set('Strict-Transport-Security', `max-age=${60 * 60 * 24 * 365 * 100}`)
   next()
 })
+logMiddle('02')
 
 app.use((req, res, next) => {
   const proto = req.get('X-Forwarded-Proto')
@@ -52,10 +61,13 @@ app.use((req, res, next) => {
   }
   next()
 })
+logMiddle('03')
 
 app.all('*', getReplayResponse)
+logMiddle('04')
 
 addCloudinaryProxies(app)
+logMiddle('05')
 
 app.all(
   '*',
@@ -63,6 +75,7 @@ app.all(
     redirectsString: fs.readFileSync(here('./_redirects.txt'), 'utf8'),
   }),
 )
+logMiddle('06')
 
 app.use((req, res, next) => {
   if (req.path.endsWith('/') && req.path.length > 1) {
@@ -73,8 +86,10 @@ app.use((req, res, next) => {
     next()
   }
 })
+logMiddle('07')
 
 app.use(compression())
+logMiddle('08')
 
 const publicAbsolutePath = here('../public')
 
@@ -99,8 +114,10 @@ app.use(
     },
   }),
 )
+logMiddle('09')
 
 app.use(morgan('tiny'))
+logMiddle('10')
 
 // log the referrer for 404s
 app.use((req, res, next) => {
@@ -114,6 +131,7 @@ app.use((req, res, next) => {
   })
   next()
 })
+logMiddle('11')
 
 function getRequestHandlerOptions(): Parameters<
   typeof createRequestHandler
@@ -142,6 +160,7 @@ app.all(
         return createRequestHandler(getRequestHandlerOptions())(req, res, next)
       },
 )
+logMiddle('twelve')
 
 const port = process.env.PORT ?? 3000
 app.listen(port, () => {
