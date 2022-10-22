@@ -41,6 +41,7 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({request}) => {
+  console.log('calling routes/index.tsx loader')
   const [
     user,
     posts,
@@ -49,13 +50,32 @@ export const loader: LoaderFunction = async ({request}) => {
     totalBlogReaders,
     blogRecommendations,
   ] = await Promise.all([
-    getUser(request),
-    getBlogMdxListItems({request}),
-    getTotalPostReads(request),
-    getBlogReadRankings({request}),
-    getReaderCount(request),
-    getBlogRecommendations(request),
+    getUser(request).then(r => {
+      console.log('getUser', r)
+      return r
+    }),
+    getBlogMdxListItems({request}).then(r => {
+      console.log('getBlogMdxListItems', r)
+      return r
+    }),
+    getTotalPostReads(request).then(r => {
+      console.log('getTotalPostReads', r)
+      return r
+    }),
+    getBlogReadRankings({request}).then(r => {
+      console.log('getBlogReadRankings', r)
+      return r
+    }),
+    getReaderCount(request).then(r => {
+      console.log('getReaderCount', r)
+      return r
+    }),
+    getBlogRecommendations(request).then(r => {
+      console.log('getBlogRecommendations', r)
+      return r
+    }),
   ])
+  console.log('✅ got all the data')
 
   const data: LoaderData = {
     blogRecommendations,
@@ -73,6 +93,7 @@ export const loader: LoaderFunction = async ({request}) => {
       user?.team ?? teams[Math.floor(Math.random() * teams.length)],
     ),
   }
+  console.log('sending data along')
   return json(data, {
     headers: {
       'Cache-Control': 'private, max-age=3600',
