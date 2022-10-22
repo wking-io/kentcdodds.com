@@ -9,10 +9,16 @@ export async function loader({request}: LoaderArgs) {
 
   try {
     await Promise.all([
-      prisma.user.count(),
-      getBlogReadRankings({request}),
-      fetch(`http://${host}`, {method: 'HEAD'}).then(r => {
-        if (!r.ok) return Promise.reject(r)
+      prisma.user.count().then(r => console.log('healthecheck user count', r)),
+      getBlogReadRankings({request}).then(r =>
+        console.log('healthcheck blog', r),
+      ),
+      fetch(`http://${host}`, {method: 'HEAD'}).then(async r => {
+        if (!r.ok) {
+          console.log('healthcheck fetch failure')
+          return Promise.reject(r)
+        }
+        console.log('healthcheck fetch success')
       }),
     ])
     console.log(request.url, 'healthcheck loader success')
