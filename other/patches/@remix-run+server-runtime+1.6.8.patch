@@ -1,0 +1,41 @@
+diff --git a/node_modules/@remix-run/server-runtime/dist/server.js b/node_modules/@remix-run/server-runtime/dist/server.js
+index 45c51be..b5107bd 100644
+--- a/node_modules/@remix-run/server-runtime/dist/server.js
++++ b/node_modules/@remix-run/server-runtime/dist/server.js
+@@ -27,10 +27,12 @@ const createRequestHandler = (build, mode$1) => {
+   let serverMode = mode.isServerMode(mode$1) ? mode$1 : mode.ServerMode.Production;
+   return async function requestHandler(request, loadContext) {
+     let url = new URL(request.url);
++    console.log(request.url, 'requestHandler');
+     let matches = routeMatching.matchServerRoutes(routes$1, url.pathname);
+     let response;
+ 
+     if (url.searchParams.has("_data")) {
++      console.log(request.url, 'handleDataRequest');
+       response = await handleDataRequest({
+         request,
+         loadContext,
+@@ -39,6 +41,7 @@ const createRequestHandler = (build, mode$1) => {
+         serverMode
+       });
+     } else if (matches && !matches[matches.length - 1].route.module.default) {
++      console.log(request.url, 'resource request');
+       response = await handleResourceRequest({
+         request,
+         loadContext,
+@@ -46,6 +49,7 @@ const createRequestHandler = (build, mode$1) => {
+         serverMode
+       });
+     } else {
++      console.log(request.url, 'handleDocumentRequest');
+       response = await handleDocumentRequest({
+         build,
+         loadContext,
+@@ -55,6 +59,7 @@ const createRequestHandler = (build, mode$1) => {
+         serverMode
+       });
+     }
++    console.log(request.url, 'response created', response);
+ 
+     if (request.method === "HEAD") {
+       return new Response(null, {
