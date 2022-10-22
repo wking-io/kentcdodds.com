@@ -1,5 +1,27 @@
+diff --git a/node_modules/@remix-run/server-runtime/dist/data.js b/node_modules/@remix-run/server-runtime/dist/data.js
+index 4ac203f..e117247 100644
+--- a/node_modules/@remix-run/server-runtime/dist/data.js
++++ b/node_modules/@remix-run/server-runtime/dist/data.js
+@@ -66,6 +66,7 @@ async function callRouteLoader({
+   request
+ }) {
+   let loader = match.route.module.loader;
++  console.log(request.url, loader)
+ 
+   if (!loader) {
+     throw new Error(`You made a ${request.method} request to ${request.url} but did not provide ` + `a default component or \`loader\` for route "${match.route.id}", ` + `so there is no way to handle the request.`);
+@@ -79,7 +80,9 @@ async function callRouteLoader({
+       context: loadContext,
+       params: match.params
+     });
++    console.log(request.url, result)
+   } catch (error) {
++    console.log(request.url, 'error', error)
+     if (!responses.isResponse(error)) {
+       throw error;
+     }
 diff --git a/node_modules/@remix-run/server-runtime/dist/server.js b/node_modules/@remix-run/server-runtime/dist/server.js
-index 45c51be..b5107bd 100644
+index 45c51be..5c5cc8b 100644
 --- a/node_modules/@remix-run/server-runtime/dist/server.js
 +++ b/node_modules/@remix-run/server-runtime/dist/server.js
 @@ -27,10 +27,12 @@ const createRequestHandler = (build, mode$1) => {
@@ -39,3 +61,27 @@ index 45c51be..b5107bd 100644
  
      if (request.method === "HEAD") {
        return new Response(null, {
+@@ -436,6 +441,7 @@ async function handleResourceRequest({
+   serverMode
+ }) {
+   let match = matches.slice(-1)[0];
++  console.log(request.url, 'handleResourceRequest', match);
+ 
+   try {
+     if (isActionRequest(request)) {
+@@ -445,6 +451,7 @@ async function handleResourceRequest({
+         request
+       });
+     } else {
++      console.log(request.url, 'data.callRouteLoader');
+       return await data.callRouteLoader({
+         match,
+         loadContext,
+@@ -452,6 +459,7 @@ async function handleResourceRequest({
+       });
+     }
+   } catch (error) {
++    console.log(request.url, 'error', error)
+     if (serverMode !== mode.ServerMode.Test) {
+       console.error(error);
+     }

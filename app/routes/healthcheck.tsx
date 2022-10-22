@@ -3,6 +3,7 @@ import {prisma} from '~/utils/prisma.server'
 import {getBlogReadRankings} from '~/utils/blog.server'
 
 export async function loader({request}: LoaderArgs) {
+  console.log(request.url, 'healthcheck loader')
   const host =
     request.headers.get('X-Forwarded-Host') ?? request.headers.get('host')
 
@@ -14,9 +15,10 @@ export async function loader({request}: LoaderArgs) {
         if (!r.ok) return Promise.reject(r)
       }),
     ])
+    console.log(request.url, 'healthcheck loader success')
     return new Response('OK')
   } catch (error: unknown) {
-    console.log('healthcheck ❌', {error})
+    console.log(request.url, 'healthcheck ❌', {error})
     return new Response('ERROR', {status: 500})
   }
 }
