@@ -3,18 +3,13 @@ import {prisma} from '~/utils/prisma.server'
 import {getBlogReadRankings} from '~/utils/blog.server'
 
 export async function loader({request}: LoaderArgs) {
-  console.log(request.url, 'healthcheck loader')
-  const host =
-    request.headers.get('X-Forwarded-Host') ?? request.headers.get('host')
-
-  console.log('would have made a host request', host)
+  // const host =
+  //   request.headers.get('X-Forwarded-Host') ?? request.headers.get('host')
 
   try {
     await Promise.all([
-      prisma.user.count().then(r => console.log('healthecheck user count', r)),
-      getBlogReadRankings({request}).then(r =>
-        console.log('healthcheck blog', r),
-      ),
+      prisma.user.count(),
+      getBlogReadRankings({request}),
       // fetch(`http://${host}`, {method: 'HEAD'}).then(async r => {
       //   if (!r.ok) {
       //     console.log('healthcheck fetch failure')
@@ -23,7 +18,6 @@ export async function loader({request}: LoaderArgs) {
       //   console.log('healthcheck fetch success')
       // }),
     ])
-    console.log(request.url, 'healthcheck loader success')
     return new Response('OK')
   } catch (error: unknown) {
     console.log(request.url, 'healthcheck ❌', {error})
