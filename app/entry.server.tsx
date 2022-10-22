@@ -1,6 +1,6 @@
 import * as React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import type {EntryContext} from '@remix-run/node'
+import type {DataFunctionArgs, EntryContext} from '@remix-run/node'
 import {RemixServer as Remix} from '@remix-run/react'
 import {getEnv} from './utils/env.server'
 import {routes as otherRoutes} from './other-routes.server'
@@ -34,6 +34,7 @@ export default async function handleRequest(
     }
   }
 
+  console.log('handleRequest', request.url)
   for (const handler of otherRoutes) {
     // eslint-disable-next-line no-await-in-loop
     const otherRouteResponse = await handler(request, remixContext)
@@ -59,7 +60,10 @@ export default async function handleRequest(
   })
 }
 
-export function handleDataRequest(response: Response) {
+export function handleDataRequest(
+  response: Response,
+  {request}: DataFunctionArgs,
+) {
   if (response.status >= 500) {
     // maybe we're just in trouble in this region... if we're not in the primary
     // region, then replay and hopefully it works next time.
@@ -71,5 +75,6 @@ export function handleDataRequest(response: Response) {
       })
     }
   }
+  console.log('handleDataRequest', request.method, request.url)
   return response
 }
