@@ -3,7 +3,7 @@ import {buildImageUrl} from 'cloudinary-build-url'
 import type {LoaderData as RootLoaderData} from '../root'
 import type {GitHubFile, MdxListItem, MdxPage} from '~/types'
 import * as mdxBundler from 'mdx-bundler/client'
-import {cachified} from 'cachified'
+import {cachified, verboseReporter} from 'cachified'
 import {compileMdx} from '~/utils/compile-mdx.server'
 import {
   downloadDirList,
@@ -46,7 +46,7 @@ async function getMdxPage(
   options: CachifiedOptions,
 ): Promise<MdxPage | null> {
   const {forceFresh, ttl = defaultTTL, request} = options
-  const key = getCompiledKey(contentDir, slug)
+  const key = `mdx-page:${getCompiledKey(contentDir, slug)}`
   const page = await cachified({
     cache,
     ttl,
@@ -191,6 +191,7 @@ async function compileMdxCached({
   const page = await cachified({
     cache,
     ttl: defaultTTL,
+    reporter: verboseReporter(),
     ...options,
     forceFresh: await shouldForceFresh({
       forceFresh: options.forceFresh,
