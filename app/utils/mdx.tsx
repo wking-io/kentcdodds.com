@@ -180,14 +180,12 @@ async function compileMdxCached({
   slug,
   entry,
   files,
-  request,
   options,
 }: {
   contentDir: string
   slug: string
   entry: string
   files: Array<GitHubFile>
-  request?: Request
   options: CachifiedOptions
 }) {
   const key = `${contentDir}:${slug}:compiled`
@@ -198,7 +196,7 @@ async function compileMdxCached({
     ...options,
     forceFresh: await shouldForceFresh({
       forceFresh: options.forceFresh,
-      request,
+      request: options.request,
       key,
     }),
     key,
