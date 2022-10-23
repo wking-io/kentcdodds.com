@@ -55,7 +55,7 @@ export const loader: LoaderFunction = async ({request}) => {
       return r
     }),
     getBlogMdxListItems({request}).then(r => {
-      console.log('getBlogMdxListItems', r)
+      console.log('getBlogMdxListItems', r.length)
       return r
     }),
     getTotalPostReads(request).then(r => {
@@ -71,7 +71,7 @@ export const loader: LoaderFunction = async ({request}) => {
       return r
     }),
     getBlogRecommendations(request).then(r => {
-      console.log('getBlogRecommendations', r)
+      console.log('getBlogRecommendations', r.length)
       return r
     }),
   ])
