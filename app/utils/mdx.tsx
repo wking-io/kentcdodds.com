@@ -29,8 +29,6 @@ type CachifiedOptions = {
 
 const defaultTTL = 1000 * 60 * 60 * 24 * 30
 
-const getCompiledKey = (contentDir: string, slug: string) =>
-  `${contentDir}:${slug}:compiled`
 const checkCompiledValue = (value: unknown) =>
   typeof value === 'object' &&
   (value === null || ('code' in value && 'frontmatter' in value))
@@ -46,7 +44,7 @@ async function getMdxPage(
   options: CachifiedOptions,
 ): Promise<MdxPage | null> {
   const {forceFresh, ttl = defaultTTL, request} = options
-  const key = `mdx-page:${getCompiledKey(contentDir, slug)}`
+  const key = `mdx-page:${contentDir}:${slug}:compiled`
   const page = await cachified({
     cache,
     ttl,
@@ -187,7 +185,7 @@ async function compileMdxCached({
   request?: Request
   options: CachifiedOptions
 }) {
-  const key = getCompiledKey(contentDir, slug)
+  const key = `${contentDir}:${slug}:compiled`
   const page = await cachified({
     cache,
     ttl: defaultTTL,
