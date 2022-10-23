@@ -1,12 +1,11 @@
+import type {LoaderArgs} from '@remix-run/node'
 import {json} from '@remix-run/node'
-import {compileMdx} from '~/utils/compile-mdx.server'
+import {getMdxPage} from '~/utils/mdx'
 
-export async function loader() {
-  const result = await compileMdx('test-compile', [
-    {
-      path: 'test-compile/index.mdx',
-      content: `---\ntitle: Test compile\n---\n\n# Test compile`,
-    },
-  ])
-  return json(result)
+export async function loader({request}: LoaderArgs) {
+  const page = await getMdxPage(
+    {contentDir: 'blog', slug: 'migrating-to-jest'},
+    {request},
+  )
+  return json(page)
 }
