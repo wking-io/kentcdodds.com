@@ -1,5 +1,5 @@
 # base node image
-FROM node:16-bullseye-slim as base
+FROM node:18-bullseye-slim as base
 
 # install open ssl for prisma and ffmpeg for the call kent functionality
 RUN apt-get update && apt-get install -y openssl ffmpeg sqlite3
