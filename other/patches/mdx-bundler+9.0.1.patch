@@ -1,0 +1,14 @@
+diff --git a/node_modules/mdx-bundler/dist/index.js b/node_modules/mdx-bundler/dist/index.js
+index c4a3f5a..54456ce 100644
+--- a/node_modules/mdx-bundler/dist/index.js
++++ b/node_modules/mdx-bundler/dist/index.js
+@@ -239,7 +239,9 @@ async function bundleMDX({
+     globalName: 'Component',
+     minify: true
+   }, matter.data);
++  console.log('running esbuild', entryPath)
+   const bundled = await esbuild.build(buildOptions);
++  console.log('esbuild done', entryPath)
+ 
+   if (bundled.outputFiles) {
+     const decoder = new _string_decoder.StringDecoder('utf8');
