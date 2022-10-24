@@ -5,7 +5,7 @@ FROM flyio/litefs:pr-109 AS litefs
 FROM node:18-bullseye-slim as base
 
 # install open ssl for prisma and ffmpeg for the call kent functionality
-RUN apt-get update && apt-get install -y fuse openssl ffmpeg sqlite3
+RUN apt-get update && apt-get install -y fuse openssl ffmpeg sqlite3 ca-certificates
 
 # install all node_modules, including dev
 FROM base as deps
