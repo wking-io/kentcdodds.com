@@ -135,7 +135,7 @@ async function getMdxDirList(contentDir: string, options?: CachifiedOptions) {
   })
 }
 
-async function downloadMdxFilesCached(
+export async function downloadMdxFilesCached(
   contentDir: string,
   slug: string,
   options: CachifiedOptions,
