@@ -3,9 +3,6 @@ app = "kcd"
 kill_signal = "SIGINT"
 kill_timeout = 5
 
-[deploy]
-  strategy = "bluegreen"
-
 [env]
   PORT = "8080"
   CYPRESS_INSTALL_BINARY = "0"
