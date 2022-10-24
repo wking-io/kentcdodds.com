@@ -138,11 +138,12 @@ async function downloadFileBySha(sha: string) {
 
 async function downloadFile(path: string) {
   const {data} = (await octokit.request(
-    `GET /repos/{owner}/{repo}/contents/{path}?ref=${encodeURIComponent(ref)}`,
+    `GET /repos/{owner}/{repo}/contents/{path}`,
     {
       owner: 'kentcdodds',
       repo: 'kentcdodds.com',
       path,
+      ref,
     },
   )) as {data: {content?: string; encoding?: string}}
 
