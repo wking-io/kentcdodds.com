@@ -83,4 +83,3 @@ RUN mkdir -p /data /litefs/data
 ADD . .
 
 ENTRYPOINT "litefs"
-
