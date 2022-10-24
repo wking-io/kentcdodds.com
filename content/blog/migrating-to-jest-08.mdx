@@ -1,0 +1,37 @@
+---
+title: Migrating to Jest
+date: 2016-11-14
+description: on the P2P team at PayPal
+meta:
+  keywords:
+    - javascript
+    - react
+    - jest
+    - testing
+    - Nodejs
+bannerCloudinaryId: unsplash/photo-1470175369463-7bb9f41e614b
+bannerCredit: '[https://unsplash.com/photos/_dwwHrYRWcM](https://unsplash.com/photos/_dwwHrYRWcM)'
+---
+
+### Was it worth it?
+
+For the client-side stuff, I can say for sure absolutely positively YES:
+
+https://twitter.com/kentcdodds/status/785571364484755456
+
+https://twitter.com/kentcdodds/status/786354753122947072
+
+As for the server side. Well, my PR for the server changes was just merged
+yesterday, so I can only say I _think_ that it was worth it. Jest provides a ton
+of great features, not the least of which is amazing performance as the number
+of tests grow. It's exposes a surprisingly powerful API with great and
+reasonable defaults. Jest ships with
+[easy code coverage instrumentation and reporting](https://egghead.io/lessons/javascript-track-project-code-coverage-with-jest?pl=testing-javascript-with-jest-a36c4074)
+right out of the box. It has
+[an interactive watch mode](https://egghead.io/lessons/javascript-use-jest-s-interactive-watch-mode?pl=testing-javascript-with-jest-a36c4074)
+that I love. It has the best mocking story of anything I've ever seen. It has
+[snapshot assertsions](https://egghead.io/lessons/javascript-use-jest-s-snapshot-testing-feature?pl=testing-javascript-with-jest-a36c4074)
+which work really well for React components, server responses, and redux state.
+And most importantly, I think my co-workers and I will _stop_ running
+`git push --no-verify` like we were before which will help our productivity, so
+I think that it's definitely worth the migration!
