@@ -5,8 +5,9 @@ import {getMdxPage} from '~/utils/mdx'
 
 export async function loader({params, request}: LoaderArgs) {
   invariant(typeof params.slug === 'string', 'slug is required')
+  invariant(typeof params.contentDir === 'string', 'contentDir is required')
   const page = await getMdxPage(
-    {contentDir: 'blog', slug: params.slug},
+    {contentDir: params.contentDir, slug: params.slug},
     {request},
   )
   return json(page)
