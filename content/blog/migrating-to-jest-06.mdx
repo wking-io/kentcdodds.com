@@ -13,26 +13,18 @@ bannerCloudinaryId: unsplash/photo-1470175369463-7bb9f41e614b
 bannerCredit: '[https://unsplash.com/photos/_dwwHrYRWcM](https://unsplash.com/photos/_dwwHrYRWcM)'
 ---
 
-### The Migration
+### Conclusion
 
-#### Client Side
+[Jest](https://github.com/facebook/jest) is awesome and I recommend you give it
+a solid look. Seriously. Oh, and don't forget to
+[give it a star](https://github.com/facebook/jest/stargazers) 🌟!
 
-My coworker [Jamund Ferguson](https://twitter.com/xjamundx) did most of the work
-for migrating our React tests from AVA. We were really helped by
-[this codemod](https://github.com/skovhus/jest-codemods) by
-[Kenneth Skovhus](https://twitter.com/kenneth_skovhus). This saved us a ton of
-time manually updating our tests to work with Jest.
+![See you on twitter!](https://res.cloudinary.com/kentcdodds-com/image/upload/v1625033154/kentcdodds.com/content/blog/migrating-to-jest/1.png)
 
-There were still some places we had to work through and we definitely had to
-configure Jest in some special ways to handle our scenario. We have both server
-and UI code in a single repo and each side gets its own special `.babelrc` which
-complicated things slightly and we had some odd behaviors with some browser
-globals, but for the most part it was pretty solid. We also had to migrate our
-usage of [proxyquire](https://npmjs.com/package/proxyquire) to Jest's (superior)
-built-in
-[mocking capabilities](http://facebook.github.io/jest/docs/manual-mocks.html).
+See you on [twitter](https://twitter.com/kentcdodds)!
 
-After getting that merged, a week or two later I migrated the old mocha UI
-tests. Luckily Jest actually works with _most_ of mocha's globals so that
-migration was relatively simple. Just some slight config changes and
-find/replace some stuff. Pretty easy...
+P.S. PayPal is hiring 😃
+
+https://twitter.com/kentcdodds/status/783330287035887616
+
+More stuff after the tweet?

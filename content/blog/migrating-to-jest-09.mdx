@@ -13,35 +13,16 @@ bannerCloudinaryId: unsplash/photo-1470175369463-7bb9f41e614b
 bannerCredit: '[https://unsplash.com/photos/_dwwHrYRWcM](https://unsplash.com/photos/_dwwHrYRWcM)'
 ---
 
-#### Stats
+### Conclusion
 
-So the stuff people always want to know is: "Is it really faster?" Well...
-Here's some clipped output from running the test commands with `time` before and
-after (note that the before tests are from over a month ago so there are a few
-more tests in the after numbers):
+[Jest](https://github.com/facebook/jest) is awesome and I recommend you give it
+a solid look. Seriously. Oh, and don't forget to
+[give it a star](https://github.com/facebook/jest/stargazers) 🌟!
 
-![before and after comparison of jest tests](https://res.cloudinary.com/kentcdodds-com/image/upload/v1625033154/kentcdodds.com/content/blog/migrating-to-jest/0.png)
+![See you on twitter!](https://res.cloudinary.com/kentcdodds-com/image/upload/v1625033154/kentcdodds.com/content/blog/migrating-to-jest/1.png)
 
-_If you're unfamiliar with the time command see
-[this](https://linux.die.net/man/1/time). "real" is the thing we're focusing on
-here._
+See you on [twitter](https://twitter.com/kentcdodds)!
 
-_Note: This is with the cache in all cases. I ran the tests several times in a
-row with my machine otherwise idle to get the best numbers I could for all
-tests. I also ran these with code coverage because that's what our git hook
-runs. Also, you'll notice there are more total tests to run in the "after" case
-because "before" is one month ago._
+P.S. PayPal is hiring 😃
 
-So here are some important stats based on my runs:
-
-**UI Before**: 144ms per test
-
-**UI After:** 28ms per test
-
-**Server Before:** 111ms per test
-
-**Server After:** 116ms per test
-
-One thing that I found with Jest is that the ms/test stat decreases as you add
-tests. Turns out it's really good at running tests in parallel. So I expect we'd
-see a wider gap with more tests.
+https://twitter.com/kentcdodds/status/783330287035887616

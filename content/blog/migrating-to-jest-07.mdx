@@ -13,37 +13,10 @@ bannerCloudinaryId: unsplash/photo-1470175369463-7bb9f41e614b
 bannerCredit: '[https://unsplash.com/photos/_dwwHrYRWcM](https://unsplash.com/photos/_dwwHrYRWcM)'
 ---
 
-#### Server Side
+### Conclusion
 
-And then there was the ~300 server Mocha tests. Surprisingly, this was an
-absolute nightmare to migrate. Most of the problems stemmed from some of our
-dependencies doing some interesting and archaic things. But some of these were
-legitimate bugs in Jest that were reported and fixed. Finding those bugs took a
-really long time.
+[Jest](https://github.com/facebook/jest) is awesome and I recommend you give it
+a solid look. Seriously. Oh, and don't forget to
+[give it a star](https://github.com/facebook/jest/stargazers) 🌟!
 
-I ended up trying 5 different approaches to the migration. I really wanted to
-limit changing the existing tests to just find/replace for globals and stuff,
-but ended up manually changing every single test in unique ways. It took about 2
-weeks of effort. In the process I learned a TON about how our dependencies work
-including Jest.
-
-I'm not going to share everything that I learned (that would take a really long
-time and a lot of background info), but
-[here's one really interesting one](https://github.com/facebook/jest/issues/2048)
-that tripped me up for a _very_ long time. It involved polyfilling `JSON.parse`.
-And [here's another](https://github.com/facebook/jest/issues/281) that caused me
-some grief. Oh, and
-[requireindex ended up not working at all](https://github.com/facebook/jest/issues/2017)
-and we had to remove it from our project. Luckily we weren't using it heavily.
-
-The reason it took so long for me to get the server tests migrated wasn't so
-much the amount of effort it took to do the code changes (though that did take
-quite a bit of time) but the amount of time it took to dig through our project's
-dependencies to figure out which one was the root cause of the issue. Most of
-the errors were thrown in bluebird promises which provided pretty much no useful
-stacktrace of any kind.
-
-I should also mention that my experience was not at all typical. Most people are
-able to migrate to Jest fairly quickly and seamlessly.
-
-https://twitter.com/iamsapegin/status/798096415075528704
+![See you on twitter!](https://res.cloudinary.com/kentcdodds-com/image/upload/v1625033154/kentcdodds.com/content/blog/migrating-to-jest/1.png)
