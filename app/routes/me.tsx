@@ -8,7 +8,7 @@ import type {
 import {json, redirect} from '@remix-run/node'
 import {Form, useActionData, useLoaderData} from '@remix-run/react'
 import clsx from 'clsx'
-import Dialog from '@reach/dialog'
+import {Dialog} from '@reach/dialog'
 import type {KCDHandle} from '~/types'
 import {useRootData} from '~/utils/use-root-data'
 import {getQrCodeDataURL} from '~/utils/qrcode.server'

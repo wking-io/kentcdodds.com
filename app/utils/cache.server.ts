@@ -16,7 +16,7 @@ const lru = (global.__lruCache = global.__lruCache
 
 export const lruCache = lruCacheAdapter(lru)
 
-export const cache: CachifiedCache<unknown> = {
+export const cache: CachifiedCache = {
   name: 'SQLite cache',
   async get(key) {
     const result = await prisma.cache.findUnique({
