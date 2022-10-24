@@ -8,4 +8,4 @@
 set -ex
 npx prisma migrate deploy
 # node ./other/runfile.js prisma-postgres/migrate.ts
-litefs
+npm run start
