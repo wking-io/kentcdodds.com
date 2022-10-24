@@ -68,7 +68,7 @@ often took time. Along with that, engineers on my team sunk hours upon hours of
 work trying to figure out where these issues were and working around them. We
 don't have that kind of time.
 
-### Why migrate to Jest instead of Mocha?
+### Why migrate to Jest instead of Mocha?
 
 So, at this point, we had all our React tests with AVA, previous UI tests
 (mostly backbone) with Mocha, and server tests with Mocha. The natural choice
@@ -112,7 +112,7 @@ https://twitter.com/cpojer/status/795729029223616512
 So I eventually
 [swapped AVA for Jest](https://github.com/kentcdodds/generator-kcd-oss/commit/23f8875358db204d16e040a14ee44aaa79681691)
 for my open source module generator and now all my open source stuff is Jest and
-I love it 💚 .
+I love it 💚 .
 
 As is the case for me, when I get excited about new tech, I really like to
 share! So I created [a bunch of videos](http://kcd.im/egghead-jest) for
@@ -135,7 +135,7 @@ time manually updating our tests to work with Jest.
 
 There were still some places we had to work through and we definitely had to
 configure Jest in some special ways to handle our scenario. We have both server
-and UI code in a single repo and each side gets its own special `.babelrc` which
+and UI code in a single repo and each side gets its own special `.babelrc` which
 complicated things slightly and we had some odd behaviors with some browser
 globals, but for the most part it was pretty solid. We also had to migrate our
 usage of [proxyquire](https://npmjs.com/package/proxyquire) to Jest's (superior)
@@ -215,8 +215,8 @@ more tests in the after numbers):
 ![before and after comparison of jest tests](https://res.cloudinary.com/kentcdodds-com/image/upload/v1625033154/kentcdodds.com/content/blog/migrating-to-jest/0.png)
 
 _If you're unfamiliar with the time command see
-[this](https://linux.die.net/man/1/time). "real" is the thing we're focusing
-on here._
+[this](https://linux.die.net/man/1/time). "real" is the thing we're focusing on
+here._
 
 _Note: This is with the cache in all cases. I ran the tests several times in a
 row with my machine otherwise idle to get the best numbers I could for all
@@ -246,7 +246,7 @@ a solid look. Seriously. Oh, and don't forget to
 
 ![See you on twitter!](https://res.cloudinary.com/kentcdodds-com/image/upload/v1625033154/kentcdodds.com/content/blog/migrating-to-jest/1.png)
 
-See you on [twitter](https://twitter.com/kentcdodds)!
+See you on [twitter](https://twitter.com/kentcdodds)!
 
 P.S. PayPal is hiring 😃
 

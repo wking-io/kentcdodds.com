@@ -42,21 +42,20 @@ export async function loader({params, request}: LoaderArgs) {
     throw new Response('Use other route', {status: 404})
   }
 
-  const [page, blogRecommendations] = await Promise.all([
-    getMdxPage({contentDir: 'pages', slug: params.slug}, {request}).catch(
-      () => null,
-    ),
-    getBlogRecommendations(request),
-  ])
+  const page = await getMdxPage(
+    {contentDir: 'pages', slug: params.slug},
+    {request},
+  ).catch(() => null)
 
   const headers = {
     'Cache-Control': 'private, max-age=3600',
     Vary: 'Cookie',
   }
   if (!page) {
+    const blogRecommendations = await getBlogRecommendations(request)
     throw json({blogRecommendations}, {status: 404, headers})
   }
-  return json({page, blogRecommendations}, {status: 200, headers})
+  return json({page}, {status: 200, headers})
 }
 
 export const headers: HeadersFunction = reuseUsefulLoaderHeaders
