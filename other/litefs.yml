@@ -4,9 +4,6 @@ mount-dir: '/litefs/data'
 # The path to where the underlying volume mount is.
 data-dir: '/data'
 
-# Execute this subprocess once LiteFS connects to the cluster.
-exec: 'bash start.sh'
-
 # These environment variables will be available in your Fly.io application.
 # You must specify "experiement.enable_consul" for FLY_CONSUL_URL to be available.
 consul:
