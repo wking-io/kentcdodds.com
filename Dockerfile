@@ -56,7 +56,8 @@ RUN npm run build
 # build smaller image for running
 FROM base
 
-ENV DATABASE_URL=file:/litefs/data/sqlite.db
+ENV DATABASE_URL=file:/data/sqlite.db
+# ENV DATABASE_URL=file:/litefs/data/sqlite.db
 ENV NODE_ENV=production
 # Make SQLite CLI accessible
 RUN echo "#!/bin/sh\nset -x\nsqlite3 \$DATABASE_URL" > /usr/local/bin/database-cli && chmod +x /usr/local/bin/database-cli
@@ -73,9 +74,9 @@ COPY --from=build /app/server-build /app/server-build
 COPY --from=build /app/other/runfile.js /app/other/runfile.js
 
 # prepare for litefs
-COPY --from=litefs /usr/local/bin/litefs /usr/local/bin/litefs
-ADD other/litefs.yml /etc/litefs.yml
-RUN mkdir -p /data /litefs/data
+# COPY --from=litefs /usr/local/bin/litefs /usr/local/bin/litefs
+# ADD other/litefs.yml /etc/litefs.yml
+# RUN mkdir -p /data /litefs/data
 
 ADD . .
 
