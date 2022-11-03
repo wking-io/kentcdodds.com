@@ -1,5 +1,5 @@
 # Fetch the LiteFS binary using a multi-stage build.
-FROM flyio/litefs:sha-887ba87 AS litefs
+# FROM flyio/litefs:sha-887ba87 AS litefs
 
 # base node image
 FROM node:18-bullseye-slim as base
@@ -79,4 +79,5 @@ RUN mkdir -p /data /litefs/data
 
 ADD . .
 
-ENTRYPOINT "litefs"
+# ENTRYPOINT "litefs"
+CMD ["bash", "start.sh"]
